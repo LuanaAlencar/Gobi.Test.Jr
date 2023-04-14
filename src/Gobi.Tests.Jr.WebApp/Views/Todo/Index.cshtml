@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Gobi.Test.Jr.Domain.TodoItem>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+
+    <div class="mt-5 mb-5">
+        <a asp-action="Add" class="btn btn-primary">
+            Add ToDo
+        </a>
+    </div>
+
+    <div class="text-center">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                
+                <th >Finalizado</th>
+                <th>Tarefa</th>
+                <th>Opções</th>
+                
+            </tr>
+        </div>    
+        </thead>
+     
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @if (item.Completed)
+                        {
+                            <span>Sim</span>
+                        }else
+                        {
+                            <span>Não</span>
+                        }
+                    </td>
+                    <td>@item.Description</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-2" title="Editar">Editar</a>
+                        <button class="btn btn-danger btn-sm deletebtn" title="Excluir" type="button" onclick="deleteClick(@item.Id)">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    function deleteClick(id) {
+        deleteUser(id);
+    };
+
+    const deleteUser = function (id) {
+        $.ajax({
+            method: 'Delete', 
+            url: 'Todo/Delete/', 
+            data: { todoItemId: id },
+            success: function () {
+                window.location.href = "/";
+            },
+            error: function (response) {
+                alert(JSON.stringify(response));
+            }
+        });
+    };
+
+</script>
